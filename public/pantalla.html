@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Pantalla 123 — Banner Director</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f5f6f8;
+    color: #1c1c1e;
+    font-family: Poppins, "Avenir Next", Ubuntu, "Segoe UI", sans-serif;
+  }
+  .wrap { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding-bottom: 48px; }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 0 8px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 4px;
+    color: #6b6b70;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .back iconify-icon { font-size: 16px; }
+  .back:hover { color: #1c1c1e; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: -0.03em; font-weight: 700; }
+  .place { margin: 4px 0 0; color: #6b6b70; font-size: 14px; }
+  .place:empty { display: none; }
+  .account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 6px;
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 999px;
+  }
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff1e6;
+    color: #e25e00;
+  }
+  .avatar iconify-icon { font-size: 18px; }
+  .account strong { display: block; font-size: 13px; font-weight: 700; }
+  .account span { display: block; margin-top: 1px; color: #6b6b70; font-size: 12px; }
+  .lead { margin: 14px 0 22px; color: #6b6b70; font-size: 14px; }
+  .toasts {
+    position: fixed;
+    z-index: 40;
+    right: 22px;
+    bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    max-width: 360px;
+    padding: 12px 16px 12px 12px;
+    background: #fff;
+    border: 1px solid #ececef;
+    border-radius: 16px;
+    box-shadow: 0 18px 44px rgba(16, 18, 24, 0.14);
+    color: #1c1c1e;
+    font: 600 14px/1.3 Poppins, sans-serif;
+    pointer-events: auto;
+    animation: toast-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .toast.is-out { animation: toast-out 0.2s ease forwards; }
+  .toast-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    background: #e8f7ee;
+    color: #0f7a45;
+  }
+  .toast.is-error .toast-icon { background: #fff1e8; color: #c2410c; }
+  .toast iconify-icon { font-size: 16px; }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes toast-out { to { opacity: 0; transform: translateY(8px); } }
+  .list {
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 16px;
+  }
+  .list summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .list summary::-webkit-details-marker { display: none; }
+  .list[open] summary { border-bottom: 1px solid #e4e4e7; }
+  .list-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #fff1e6;
+    color: #f47b20;
+  }
+  .list-icon iconify-icon { font-size: 18px; }
+  .chevron {
+    margin-left: 4px;
+    display: inline-flex;
+    font-size: 18px;
+    color: #6b6b70;
+  }
+  .eye {
+    margin-left: auto;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #3f3f46;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .eye iconify-icon { font-size: 20px; }
+  .seconds {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    color: #6b6b70;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .seconds input {
+    width: 58px;
+    margin-right: 6px;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    background: #fff;
+    color: #1c1c1e;
+    font: 600 14px Poppins, sans-serif;
+    padding: 6px 8px;
+  }
+  .element .edit {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 9px;
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    color: #1c1c1e;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .element .edit iconify-icon { font-size: 16px; color: #f47b20; }
+  .element .seconds { margin-left: 12px; }
+  .element .eye { margin-left: 8px; }
+  .eye.is-off { color: #a1a1aa; }
+  .list.is-off, .element.is-off { opacity: 0.55; }
+  .list[open] .chevron { transform: rotate(180deg); }
+  .order {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #f4f4f5;
+    color: #3f3f46;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .row-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: #fff1e6;
+    color: #f47b20;
+  }
+  .row-icon iconify-icon { font-size: 18px; }
+  .row-copy { min-width: 0; }
+  .row-copy strong { display: block; font-size: 15px; font-weight: 700; }
+  .row-copy span { display: block; margin-top: 2px; color: #6b6b70; font-size: 13px; }
+  .time {
+    margin-left: auto;
+    color: #3f3f46;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .elements { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+  .element {
+    background: #f5f6f8;
+    border: 1px solid #e4e4e7;
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .element header {
+    padding: 0 0 12px;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+  .stage {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f5f6f8;
+    border: 1px solid #e4e4e7;
+  }
+  .stage iframe {
+    width: 1920px;
+    height: 158px;
+    border: 0;
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  @media (max-width: 760px) {
+    header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div class="wrap">
+    <header>
+      <div>
+        <a class="back" href="/home">
+          <iconify-icon icon="solar:alt-arrow-left-linear" aria-hidden="true"></iconify-icon>
+          Pantallas
+        </a>
+        <h1>Pantalla 123</h1>
+        <p class="place" id="place"></p>
+      </div>
+      <div class="account">
+        <div class="avatar">
+          <iconify-icon icon="solar:user-rounded-linear" aria-hidden="true"></iconify-icon>
+        </div>
+        <div>
+          <strong>Facundo Villegas</strong>
+          <span>fv@bannerdirector.com</span>
+        </div>
+      </div>
+    </header>
+    <p class="lead">Esta pantalla reproduce una lista. Cada elemento permanece los segundos que indiques y pasa al siguiente.</p>
+
+    <details class="list" id="list">
+      <summary>
+        <span class="list-icon">
+          <iconify-icon icon="solar:list-linear" aria-hidden="true"></iconify-icon>
+        </span>
+        <div class="row-copy">
+          <strong>Lista</strong>
+          <span id="list-meta">3 elementos</span>
+        </div>
+        <button type="button" class="eye" data-eye="list" aria-label="Visible">
+          <iconify-icon icon="solar:eye-linear" aria-hidden="true"></iconify-icon>
+        </button>
+        <iconify-icon class="chevron" icon="solar:alt-arrow-down-linear" aria-hidden="true"></iconify-icon>
+      </summary>
+      <div class="elements">
+        <article class="element" data-eye="rail">
+          <header>
+            <span class="order">1</span>
+            <span class="row-icon">
+              <iconify-icon icon="solar:widget-2-linear" aria-hidden="true"></iconify-icon>
+            </span>
+            <div class="row-copy">
+              <strong>Tanda de productos</strong>
+              <span>Leche, bombones Nestlé y queso</span>
+            </div>
+            <a class="edit" href="/editor/rail">
+              <iconify-icon icon="solar:pen-linear" aria-hidden="true"></iconify-icon>
+              Editar
+            </a>
+            <label class="seconds">
+              <input type="number" min="1" max="600" step="1" data-seconds="rail" value="5" aria-label="Segundos de la tanda">
+              s
+            </label>
+            <button type="button" class="eye" data-eye="rail" aria-label="Visible">
+              <iconify-icon icon="solar:eye-linear" aria-hidden="true"></iconify-icon>
+            </button>
+          </header>
+          <div class="stage"><iframe src="/?slide=0" title="Tanda de productos"></iframe></div>
+        </article>
+        <article class="element" data-eye="offer">
+          <header>
+            <span class="order">2</span>
+            <span class="row-icon">
+              <iconify-icon icon="solar:tag-price-linear" aria-hidden="true"></iconify-icon>
+            </span>
+            <div class="row-copy">
+              <strong>Llamador de ofertas</strong>
+              <span>Ofertas · 2×1 · Llevá 2, pagá 1</span>
+            </div>
+            <a class="edit" href="/editor/offer">
+              <iconify-icon icon="solar:pen-linear" aria-hidden="true"></iconify-icon>
+              Editar
+            </a>
+            <label class="seconds">
+              <input type="number" min="1" max="600" step="1" data-seconds="offer" value="5" aria-label="Segundos del llamador">
+              s
+            </label>
+            <button type="button" class="eye" data-eye="offer" aria-label="Visible">
+              <iconify-icon icon="solar:eye-linear" aria-hidden="true"></iconify-icon>
+            </button>
+          </header>
+          <div class="stage"><iframe src="/?slide=1" title="Llamador de ofertas"></iframe></div>
+        </article>
+        <article class="element" data-eye="fresh">
+          <header>
+            <span class="order">3</span>
+            <span class="row-icon">
+              <iconify-icon icon="solar:leaf-linear" aria-hidden="true"></iconify-icon>
+            </span>
+            <div class="row-copy">
+              <strong>Frescura del día</strong>
+              <span>Recién repuesto · cadena de frío</span>
+            </div>
+            <a class="edit" href="/editor/fresh">
+              <iconify-icon icon="solar:pen-linear" aria-hidden="true"></iconify-icon>
+              Editar
+            </a>
+            <label class="seconds">
+              <input type="number" min="1" max="600" step="1" data-seconds="fresh" value="5" aria-label="Segundos de la frescura">
+              s
+            </label>
+            <button type="button" class="eye" data-eye="fresh" aria-label="Visible">
+              <iconify-icon icon="solar:eye-linear" aria-hidden="true"></iconify-icon>
+            </button>
+          </header>
+          <div class="stage"><iframe src="/?slide=2" title="Frescura del día"></iframe></div>
+        </article>
+      </div>
+    </details>
+  </div>
+  <script>
+    function fit() {
+      var stages = document.querySelectorAll(".stage");
+      for (var i = 0; i < stages.length; i++) {
+        var frame = stages[i].querySelector("iframe");
+        var scale = stages[i].clientWidth / 1920;
+        frame.style.transform = "scale(" + scale + ")";
+        stages[i].style.height = Math.round(158 * scale) + "px";
+      }
+    }
+    fit();
+    window.addEventListener("resize", fit);
+    document.getElementById("list").addEventListener("toggle", function () {
+      if (this.open) fit();
+    });
+
+    var playlist = { visible: true, elements: [{ id: "rail", visible: true, seconds: 5 }, { id: "offer", visible: true, seconds: 5 }, { id: "fresh", visible: true, seconds: 5 }] };
+
+    function eyeIcon(visible) {
+      return visible ? "solar:eye-linear" : "solar:eye-closed-linear";
+    }
+
+    function secondsOf(id) {
+      var found = 5;
+      playlist.elements.forEach(function (item) {
+        if (item.id === id) found = item.seconds || 5;
+      });
+      return found;
+    }
+
+    function visibleOf(id) {
+      if (id === "list") return playlist.visible;
+      var found = true;
+      playlist.elements.forEach(function (item) {
+        if (item.id === id) found = item.visible;
+      });
+      return found;
+    }
+
+    function paintEyes() {
+      var buttons = document.querySelectorAll(".eye");
+      for (var i = 0; i < buttons.length; i++) {
+        var id = buttons[i].getAttribute("data-eye");
+        var on = visibleOf(id);
+        buttons[i].className = on ? "eye" : "eye is-off";
+        buttons[i].setAttribute("aria-label", on ? "Visible" : "No visible");
+        buttons[i].querySelector("iconify-icon").setAttribute("icon", eyeIcon(on));
+      }
+      var inputs = document.querySelectorAll("[data-seconds]");
+      for (var k = 0; k < inputs.length; k++) {
+        if (document.activeElement === inputs[k]) continue;
+        inputs[k].value = secondsOf(inputs[k].getAttribute("data-seconds"));
+      }
+      document.getElementById("list").className = playlist.visible ? "list" : "list is-off";
+      var total = playlist.elements.length;
+      document.getElementById("list-meta").textContent = total + (total === 1 ? " elemento" : " elementos");
+      var cards = document.querySelectorAll(".element");
+      for (var j = 0; j < cards.length; j++) {
+        var cardId = cards[j].getAttribute("data-eye");
+        cards[j].className = visibleOf(cardId) ? "element" : "element is-off";
+      }
+    }
+
+    function dismissToast(node) {
+      if (!node || node.classList.contains("is-out")) return;
+      node.classList.add("is-out");
+      clearTimeout(node._hide);
+      setTimeout(function () { if (node.parentNode) node.remove(); }, 200);
+    }
+
+    function toast(text, kind) {
+      var root = document.getElementById("toasts");
+      if (!root || !text) return;
+      var slot = kind === "error" ? "error" : "ok";
+      var node = root.querySelector('[data-slot="' + slot + '"]');
+      if (!node) {
+        node = document.createElement("div");
+        node.className = "toast";
+        node.setAttribute("data-slot", slot);
+        node.innerHTML = "<span class=\"toast-icon\"><iconify-icon aria-hidden=\"true\"></iconify-icon></span><span class=\"toast-text\"></span>";
+        root.appendChild(node);
+      }
+      node.classList.remove("is-out", "is-error");
+      if (kind === "error") node.classList.add("is-error");
+      node.querySelector("iconify-icon").setAttribute("icon", kind === "error" ? "solar:danger-circle-linear" : "solar:check-circle-linear");
+      node.querySelector(".toast-text").textContent = text;
+      node.style.animation = "none";
+      void node.offsetWidth;
+      node.style.animation = "";
+      clearTimeout(node._hide);
+      node._hide = setTimeout(function () { dismissToast(node); }, 2600);
+    }
+
+    function savePlaylist(message) {
+      return fetch("/api/playlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(playlist)
+      }).then(function (response) { return response.json(); })
+        .then(function (data) {
+          playlist = data;
+          paintEyes();
+          if (message) toast(message, "ok");
+        })
+        .catch(function () {
+          toast("No se pudo guardar la lista", "error");
+        });
+    }
+
+    document.querySelector(".wrap").addEventListener("click", function (event) {
+      var button = event.target.closest(".eye");
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var id = button.getAttribute("data-eye");
+      if (id === "list") playlist.visible = !playlist.visible;
+      playlist.elements.forEach(function (item) {
+        if (item.id === id) item.visible = !item.visible;
+      });
+      var on = id === "list" ? playlist.visible !== false : visibleOf(id);
+      var name = "El elemento";
+      if (id === "list") name = "La lista";
+      else {
+        var card = button.closest("article") || button.closest(".list");
+        var title = card ? card.querySelector("strong") : null;
+        if (title && title.textContent) name = title.textContent;
+      }
+      savePlaylist(name + (on ? " se ve" : " no se ve"));
+    });
+
+    document.querySelector(".wrap").addEventListener("change", function (event) {
+      var input = event.target.closest("[data-seconds]");
+      if (!input) return;
+      var number = parseInt(input.value, 10);
+      if (!number || number < 1) number = 1;
+      if (number > 600) number = 600;
+      input.value = number;
+      playlist.elements.forEach(function (item) {
+        if (item.id === input.getAttribute("data-seconds")) item.seconds = number;
+      });
+      savePlaylist(number + (number === 1 ? " segundo" : " segundos"));
+    });
+
+    function esc(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;");
+    }
+
+    var extraKey = "";
+
+    function paintCreations(items) {
+      var key = JSON.stringify({ elements: playlist.elements, items: items });
+      if (key === extraKey) {
+        paintEyes();
+        return;
+      }
+      extraKey = key;
+      var byId = {};
+      (items || []).forEach(function (item) { byId[item.id] = item; });
+      var previous = document.querySelectorAll("[data-custom]");
+      for (var i = 0; i < previous.length; i++) previous[i].remove();
+      var html = "";
+      var order = 4;
+      playlist.elements.forEach(function (entry) {
+        if (!/^c\d+$/.test(entry.id) || !byId[entry.id]) return;
+        var creation = byId[entry.id];
+        var products = creation.template === "products";
+        var feature = creation.template === "feature";
+        var count = products ? (creation.count || (creation.productIds || []).length) : (creation.pieces || []).length;
+        var detail = feature ? "Un producto" : (products ? (count + " productos") : (count === 1 ? "1 texto" : count + " textos"));
+        var icon = feature ? "solar:star-linear" : (products ? "solar:bag-4-linear" : "solar:text-square-linear");
+        html += "<article class=\"element\" data-eye=\"" + esc(entry.id) + "\" data-custom=\"1\">";
+        html += "<header><span class=\"order\">" + order + "</span>";
+        html += "<span class=\"row-icon\"><iconify-icon icon=\"" + icon + "\" aria-hidden=\"true\"></iconify-icon></span>";
+        html += "<div class=\"row-copy\"><strong>" + esc(creation.name || "Texto") + "</strong><span>" + detail + "</span></div>";
+        html += "<a class=\"edit\" href=\"/home?crear=" + encodeURIComponent(entry.id) + "\"><iconify-icon icon=\"solar:pen-linear\" aria-hidden=\"true\"></iconify-icon> Editar</a>";
+        html += "<label class=\"seconds\"><input type=\"number\" min=\"1\" max=\"600\" step=\"1\" data-seconds=\"" + esc(entry.id) + "\" value=\"" + (entry.seconds || 5) + "\" aria-label=\"Segundos de " + esc(creation.name || "la creación") + "\"> s</label>";
+        html += "<button type=\"button\" class=\"eye\" data-eye=\"" + esc(entry.id) + "\" aria-label=\"Visible\"><iconify-icon icon=\"solar:eye-linear\" aria-hidden=\"true\"></iconify-icon></button>";
+        html += "</header><div class=\"stage\"><iframe src=\"/?slide=" + encodeURIComponent(entry.id) + "\" title=\"" + esc(creation.name || "Creación") + "\"></iframe></div></article>";
+        order += 1;
+      });
+      if (html) document.querySelector(".elements").insertAdjacentHTML("beforeend", html);
+      paintEyes();
+      fit();
+    }
+
+    function pullCreations() {
+      fetch("/api/creations", { cache: "no-store" })
+        .then(function (response) { return response.json(); })
+        .then(function (data) { paintCreations(data.items || []); })
+        .catch(function () {});
+    }
+
+    fetch("/api/playlist", { cache: "no-store" })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        playlist = data;
+        paintEyes();
+        pullCreations();
+      });
+    setInterval(function () {
+      fetch("/api/playlist", { cache: "no-store" })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          playlist = data;
+          pullCreations();
+        })
+        .catch(function () {});
+    }, 2000);
+    fetch("/api/screens", { cache: "no-store" })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        var found = null;
+        (data.screens || []).forEach(function (item) {
+          if (item.id === "123") found = item;
+        });
+        if (!found) return;
+        var bits = [];
+        if (found.name) bits.push(found.name);
+        if (found.description) bits.push(found.description);
+        document.getElementById("place").textContent = bits.join(" · ");
+      });
+  </script>
+</body>
+</html>

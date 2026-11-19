@@ -1,0 +1,18 @@
+{
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30,
+      "includeFiles": "{public/**,*.json}"
+    }
+  },
+  "rewrites": [
+    { "source": "/", "destination": "/display.html" },
+    { "source": "/home", "destination": "/home.html" },
+    { "source": "/pantalla/123", "destination": "/pantalla.html" },
+    { "source": "/editor", "destination": "/editor.html" },
+    { "source": "/editor/rail", "destination": "/piece.html" },
+    { "source": "/editor/offer", "destination": "/piece.html" },
+    { "source": "/editor/fresh", "destination": "/piece.html" },
+    { "source": "/(.*)", "destination": "/api?__route=/$1" }
+  ]
+}

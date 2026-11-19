@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Editar elemento — Banner Director</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f5f6f8;
+    color: #1c1c1e;
+    font-family: Poppins, "Avenir Next", Ubuntu, "Segoe UI", sans-serif;
+  }
+  .wrap { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding-bottom: 56px; }
+  header { padding: 28px 0 8px; }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 4px;
+    color: #6b6b70;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .back iconify-icon { font-size: 16px; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: -0.03em; font-weight: 700; }
+  .status { margin: 6px 0 0; color: #6b6b70; font-size: 13px; }
+  .status.ok { color: #6b6b70; }
+  .toasts {
+    position: fixed;
+    z-index: 40;
+    right: 22px;
+    bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    max-width: 360px;
+    padding: 12px 16px 12px 12px;
+    background: #fff;
+    border: 1px solid #ececef;
+    border-radius: 16px;
+    box-shadow: 0 18px 44px rgba(16, 18, 24, 0.14);
+    color: #1c1c1e;
+    font: 600 14px/1.3 Poppins, sans-serif;
+    pointer-events: auto;
+    animation: toast-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .toast.is-out { animation: toast-out 0.2s ease forwards; }
+  .toast-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    background: #e8f7ee;
+    color: #0f7a45;
+  }
+  .toast.is-error .toast-icon { background: #fff1e8; color: #c2410c; }
+  .toast iconify-icon { font-size: 16px; }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes toast-out { to { opacity: 0; transform: translateY(8px); } }
+  .stage {
+    width: 100%;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #e4e4e7;
+  }
+  .stage iframe {
+    width: 3938px;
+    height: 324px;
+    border: 0;
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  section {
+    margin-top: 18px;
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 16px;
+    padding: 16px;
+  }
+  section h2 {
+    margin: 0 0 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6b6b70;
+  }
+  .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .count {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 14px;
+  }
+  .count span { color: #6b6b70; font-size: 13px; font-weight: 600; }
+  .count-options { display: flex; gap: 8px; }
+  .count-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e4e4e7;
+    border-radius: 10px;
+    background: #fff;
+    color: #1c1c1e;
+    font: 700 14px Poppins, sans-serif;
+    cursor: pointer;
+  }
+  .count-btn.is-on { background: #1c1c1e; color: #fff; border-color: #1c1c1e; }
+  article {
+    background: #f5f6f8;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    padding: 12px;
+  }
+  article h3 { margin: 0 0 10px; font-size: 14px; }
+  label { display: block; margin-bottom: 10px; color: #6b6b70; font-size: 12px; font-weight: 600; }
+  input {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    background: #fff;
+    color: #1c1c1e;
+    font: 600 15px Poppins, sans-serif;
+    padding: 8px 10px;
+  }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .shapes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .shape {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #e4e4e7;
+    background: #fff;
+    color: #1c1c1e;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font: 600 13px Poppins, sans-serif;
+    cursor: pointer;
+  }
+  .shape iconify-icon { font-size: 18px; color: #f47b20; }
+  .shape.is-off { color: #a1a1aa; }
+  .shape.is-off iconify-icon { color: #a1a1aa; }
+  .hint { margin: -4px 0 14px; color: #6b6b70; font-size: 13px; font-weight: 500; line-height: 1.45; }
+  .pick { position: relative; }
+  .pick-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 64px;
+    padding: 8px 10px;
+    border: 1px solid #e4e4e7;
+    border-radius: 10px;
+    background: #fff;
+    color: #1c1c1e;
+    text-align: left;
+    cursor: pointer;
+    font: 600 14px Poppins, sans-serif;
+  }
+  .pick-btn img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f5f6f8;
+    flex: 0 0 auto;
+  }
+  .pick-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pick-copy strong, .pick-option strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pick-copy em, .pick-option em {
+    display: block;
+    color: #6b6b70;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pick-btn > b, .pick-option > b { font-size: 13px; white-space: nowrap; }
+  .pick-placeholder {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b6b70;
+    font-weight: 600;
+  }
+  .pick-chevron { color: #6b6b70; font-size: 16px; flex: 0 0 auto; }
+  .pick-menu {
+    position: absolute;
+    z-index: 8;
+    left: 0;
+    right: 0;
+    top: calc(100% + 6px);
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(28, 28, 30, 0.12);
+    overflow: hidden;
+  }
+  .pick-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e4e4e7;
+    color: #6b6b70;
+  }
+  .pick-search input {
+    margin: 0;
+    border: 0;
+    padding: 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .pick-list { max-height: 260px; overflow: auto; }
+  .pick-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    background: #fff;
+    color: #1c1c1e;
+    text-align: left;
+    cursor: pointer;
+    font: 600 13px Poppins, sans-serif;
+  }
+  .pick-option img { width: 36px; height: 36px; object-fit: contain; flex: 0 0 auto; }
+  .pick-option span { flex: 1; min-width: 0; }
+  .pick-option:hover, .pick-option.is-on { background: #fff6ef; }
+  .pick-none { margin: 0; padding: 12px; color: #6b6b70; font-size: 13px; }
+  .pick-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 8px;
+    margin: 8px 2px 0;
+    color: #6b6b70;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pick-meta:empty { display: none; }
+  .pick-meta span + span::before { content: "·"; margin-right: 8px; color: #d0d0d4; }
+  .missing { margin-top: 24px; color: #6b6b70; }
+  @media (max-width: 800px) {
+    .products { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div class="wrap">
+    <header>
+      <a class="back" href="/pantalla/123">
+        <iconify-icon icon="solar:alt-arrow-left-linear" aria-hidden="true"></iconify-icon>
+        Pantalla 123
+      </a>
+      <h1 id="title">Elemento</h1>
+      <p class="status" id="status">Cargando…</p>
+    </header>
+    <div id="app"></div>
+  </div>
+  <script>
+    var CATALOG = {
+      rail: {
+        title: "Tanda de productos",
+        slide: 0,
+        shapes: [
+          ["frames", "Cuadros blancos"],
+          ["gleam", "Brillo"]
+        ]
+      },
+      offer: {
+        title: "Llamador de ofertas",
+        slide: 1,
+        fields: [
+          ["kicker", "Pastilla"],
+          ["hero", "Figura"],
+          ["title", "Título"],
+          ["detail", "Detalle"]
+        ],
+        shapes: [
+          ["pill", "Pastilla"],
+          ["halo", "Halo"],
+          ["particles", "Partículas"],
+          ["shine", "Barrido de luz"]
+        ]
+      },
+      fresh: {
+        title: "Frescura del día",
+        slide: 2,
+        fields: [
+          ["kicker", "Pastilla"],
+          ["hero", "Título principal"],
+          ["seal", "Sello"],
+          ["sealDetail", "Detalle del sello"],
+          ["title", "Título"],
+          ["detail", "Detalle"]
+        ],
+        shapes: [
+          ["pill", "Pastilla"],
+          ["seal", "Sello"],
+          ["rings", "Aros"],
+          ["particles", "Partículas"],
+          ["mist", "Bruma"],
+          ["shine", "Barrido de luz"]
+        ]
+      }
+    };
+
+    var id = location.pathname.split("/").pop();
+    var spec = CATALOG[id];
+    var elements = null;
+    var products = null;
+    var catalog = [];
+    var timer = null;
+    var statusEl = document.getElementById("status");
+    var SCREEN_BRANCH = "mixo";
+
+    function fit() {
+      var stage = document.querySelector(".stage");
+      if (!stage) return;
+      var frame = stage.querySelector("iframe");
+      var scale = stage.clientWidth / 3938;
+      frame.style.transform = "scale(" + scale + ")";
+      stage.style.height = Math.round(324 * scale) + "px";
+    }
+
+    function dismissToast(node) {
+      if (!node || node.classList.contains("is-out")) return;
+      node.classList.add("is-out");
+      clearTimeout(node._hide);
+      setTimeout(function () { if (node.parentNode) node.remove(); }, 200);
+    }
+
+    function toast(text, kind) {
+      var root = document.getElementById("toasts");
+      if (!root || !text) return;
+      var slot = kind === "error" ? "error" : "ok";
+      var node = root.querySelector('[data-slot="' + slot + '"]');
+      if (!node) {
+        node = document.createElement("div");
+        node.className = "toast";
+        node.setAttribute("data-slot", slot);
+        node.innerHTML = "<span class=\"toast-icon\"><iconify-icon aria-hidden=\"true\"></iconify-icon></span><span class=\"toast-text\"></span>";
+        root.appendChild(node);
+      }
+      node.classList.remove("is-out", "is-error");
+      if (kind === "error") node.classList.add("is-error");
+      node.querySelector("iconify-icon").setAttribute("icon", kind === "error" ? "solar:danger-circle-linear" : "solar:check-circle-linear");
+      node.querySelector(".toast-text").textContent = text;
+      node.style.animation = "none";
+      void node.offsetWidth;
+      node.style.animation = "";
+      clearTimeout(node._hide);
+      node._hide = setTimeout(function () { dismissToast(node); }, 2600);
+    }
+
+    function mark(message, ok) {
+      if (message === "Guardando…" || message === "Cargando…") return;
+      if (message === "Listo para editar") {
+        statusEl.textContent = message;
+        statusEl.className = "status";
+        return;
+      }
+      if (!message) {
+        statusEl.textContent = "";
+        return;
+      }
+      statusEl.textContent = ok ? "Listo para editar" : "";
+      toast(message, ok ? "ok" : "error");
+    }
+
+    function esc(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;");
+    }
+
+    function field(label, value, attrs) {
+      return "<label>" + label + "<input " + attrs + " value=\"" + esc(value) + "\"></label>";
+    }
+
+    function plain(value) {
+      return String(value == null ? "" : value).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function money(value) {
+      var digits = String(Math.round(Number(value) || 0));
+      var out = "";
+      for (var i = 0; i < digits.length; i++) {
+        if (i > 0 && (digits.length - i) % 3 === 0) out += ".";
+        out += digits.charAt(i);
+      }
+      return "$" + out;
+    }
+
+    function covers(item) {
+      return !!item && (item.branches === "all" || (Array.isArray(item.branches) && item.branches.indexOf(SCREEN_BRANCH) >= 0));
+    }
+
+    function branchValue(item, mapKey, sharedKey) {
+      if (item.branches !== "all" && item[mapKey] && Object.prototype.hasOwnProperty.call(item[mapKey], SCREEN_BRANCH)) {
+        return item[mapKey][SCREEN_BRANCH];
+      }
+      return item[sharedKey];
+    }
+
+    function catalogById(productId) {
+      for (var i = 0; i < catalog.length; i++) {
+        if (catalog[i].id === productId) return catalog[i];
+      }
+      return null;
+    }
+
+    function linkedProduct(slot) {
+      var item = products && products[slot] ? catalogById(products[slot].productId) : null;
+      return covers(item) ? item : null;
+    }
+
+    function faceHtml(item) {
+      var chevron = "<iconify-icon class=\"pick-chevron\" icon=\"solar:alt-arrow-down-linear\" aria-hidden=\"true\"></iconify-icon>";
+      if (!item) {
+        return "<span class=\"pick-placeholder\"><iconify-icon icon=\"solar:tag-price-linear\" aria-hidden=\"true\"></iconify-icon>Elegí un producto</span>" + chevron;
+      }
+      return "<img src=\"" + esc(item.image || "") + "\" alt=\"\">" +
+        "<span class=\"pick-copy\"><strong>" + esc(item.name) + "</strong><em>" + esc(item.description || "") + "</em></span>" +
+        "<b>" + money(branchValue(item, "prices", "price")) + "</b>" + chevron;
+    }
+
+    function metaHtml(item) {
+      if (!item) return "";
+      var offer = branchValue(item, "offers", "onOffer") === true;
+      var discount = Number(branchValue(item, "discounts", "discount")) || 0;
+      var parts = [offer ? "En oferta" : "Sin oferta"];
+      if (offer && discount) parts.push(discount + "%");
+      parts.push(money(branchValue(item, "prices", "price")));
+      var html = "";
+      for (var i = 0; i < parts.length; i++) html += "<span>" + parts[i] + "</span>";
+      return html;
+    }
+
+    function optionsHtml(slot, selectedId) {
+      var html = "";
+      for (var i = 0; i < catalog.length; i++) {
+        var item = catalog[i];
+        if (!covers(item)) continue;
+        html += "<button type=\"button\" class=\"pick-option" + (item.id === selectedId ? " is-on" : "") + "\" data-slot=\"" + slot + "\" data-id=\"" + esc(item.id) + "\" data-text=\"" + esc(plain(item.name + " " + item.description)) + "\">";
+        html += "<img src=\"" + esc(item.image || "") + "\" alt=\"\">";
+        html += "<span><strong>" + esc(item.name) + "</strong><em>" + esc(item.description || "") + "</em></span>";
+        html += "<b>" + money(branchValue(item, "prices", "price")) + "</b></button>";
+      }
+      return html;
+    }
+
+    function closeMenus() {
+      var menus = document.querySelectorAll(".pick-menu");
+      for (var i = 0; i < menus.length; i++) menus[i].hidden = true;
+    }
+
+    function filterMenu(menu, query) {
+      var q = plain(query);
+      var options = menu.querySelectorAll(".pick-option");
+      var shown = 0;
+      for (var i = 0; i < options.length; i++) {
+        var match = !q || (options[i].getAttribute("data-text") || "").indexOf(q) >= 0;
+        options[i].hidden = !match;
+        if (match) shown += 1;
+      }
+      menu.querySelector(".pick-none").hidden = shown > 0;
+    }
+
+    function paintSlot(slot) {
+      var pick = document.querySelector(".pick[data-slot=\"" + slot + "\"]");
+      if (!pick) return;
+      var item = linkedProduct(slot);
+      var selected = item ? item.id : "";
+      pick.querySelector(".pick-btn").innerHTML = faceHtml(item);
+      pick.parentNode.querySelector(".pick-meta").innerHTML = metaHtml(item);
+      var options = pick.querySelectorAll(".pick-option");
+      for (var i = 0; i < options.length; i++) {
+        options[i].classList.toggle("is-on", options[i].getAttribute("data-id") === selected);
+      }
+    }
+
+    function draw() {
+      var piece = elements[id];
+      var html = "<div class=\"stage\"><iframe src=\"/?slide=" + spec.slide + "\" title=\"" + spec.title + "\"></iframe></div>";
+      if (id === "rail") {
+        html += "<section><h2>Productos</h2>";
+        html += "<div class=\"count\"><span>Cantidad</span><div class=\"count-options\">";
+        for (var n = 2; n <= 4; n++) {
+          html += "<button type=\"button\" class=\"count-btn" + (n === products.length ? " is-on" : "") + "\" data-count=\"" + n + "\" aria-label=\"" + n + " productos\">" + n + "</button>";
+        }
+        html += "</div></div>";
+        html += "<p class=\"hint\">Elegí entre 2 y 4 productos. La oferta, el descuento y el precio son los de Mixxo.</p>";
+        html += "<div class=\"products\">";
+        for (var i = 0; i < products.length; i++) {
+          var linked = linkedProduct(i);
+          html += "<article><h3>Producto " + (i + 1) + "</h3>";
+          html += "<div class=\"pick\" data-slot=\"" + i + "\">";
+          html += "<button type=\"button\" class=\"pick-btn\" data-slot=\"" + i + "\" aria-label=\"Elegir producto " + (i + 1) + "\">" + faceHtml(linked) + "</button>";
+          html += "<div class=\"pick-menu\" hidden>";
+          html += "<div class=\"pick-search\"><iconify-icon icon=\"solar:magnifer-linear\" aria-hidden=\"true\"></iconify-icon>";
+          html += "<input class=\"pick-filter\" data-slot=\"" + i + "\" placeholder=\"Buscar producto\" aria-label=\"Buscar producto " + (i + 1) + "\" autocomplete=\"off\"></div>";
+          html += "<div class=\"pick-list\">" + optionsHtml(i, linked ? linked.id : "") + "</div>";
+          html += "<p class=\"pick-none\" hidden>Ningún producto coincide.</p>";
+          html += "</div></div>";
+          html += "<p class=\"pick-meta\">" + metaHtml(linked) + "</p>";
+          html += "</article>";
+        }
+        html += "</div></section>";
+      } else {
+        html += "<section><h2>Textos</h2>";
+        for (var f = 0; f < spec.fields.length; f++) {
+          var key = spec.fields[f][0];
+          html += field(spec.fields[f][1], piece[key], "data-key=\"" + key + "\"");
+        }
+        html += "</section>";
+      }
+      html += "<section><h2>Formas</h2><div class=\"shapes\">";
+      for (var s = 0; s < spec.shapes.length; s++) {
+        var on = piece.shapes[spec.shapes[s][0]] !== false;
+        html += "<button type=\"button\" class=\"shape" + (on ? "" : " is-off") + "\" data-shape=\"" + spec.shapes[s][0] + "\">";
+        html += "<iconify-icon icon=\"" + (on ? "solar:eye-linear" : "solar:eye-closed-linear") + "\"></iconify-icon>";
+        html += spec.shapes[s][1] + "</button>";
+      }
+      html += "</div></section>";
+      document.getElementById("app").innerHTML = html;
+      fit();
+    }
+
+    function blankProduct() {
+      return { brand: "", name: "", detail: "", price: 0, listPrice: 0, badge: "", image: "", productId: "" };
+    }
+
+    function setCount(next) {
+      if (next < 2 || next > 4 || next === products.length) return;
+      if (next > products.length) {
+        while (products.length < next) products.push(blankProduct());
+      } else {
+        products = products.slice(0, next);
+      }
+      draw();
+      save();
+    }
+
+    function saveElements() {
+      return fetch("/api/elements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(elements)
+      }).then(function (response) { return response.json(); })
+        .then(function (data) { elements = data; });
+    }
+
+    function saveProducts() {
+      return fetch("/api/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ count: products.length, products: products })
+      }).then(function (response) { return response.json(); })
+        .then(function (data) { products = data.products; });
+    }
+
+    function save() {
+      var job = saveElements();
+      if (id === "rail") job = job.then(saveProducts);
+      job.then(function () { mark("Guardado", true); })
+        .catch(function () { mark("No se pudo guardar", false); });
+    }
+
+    function schedule() {
+      mark("Guardando…", false);
+      clearTimeout(timer);
+      timer = setTimeout(save, 280);
+    }
+
+    document.getElementById("app").addEventListener("input", function (event) {
+      var input = event.target;
+      if (!input.getAttribute) return;
+      if (input.classList.contains("pick-filter")) {
+        filterMenu(input.closest(".pick-menu"), input.value);
+        return;
+      }
+      var key = input.getAttribute("data-key");
+      if (!key) return;
+      var product = input.getAttribute("data-product");
+      if (product != null) {
+        var item = products[Number(product)];
+        if (key === "price" || key === "listPrice") item[key] = input.value.replace(/\D/g, "");
+        else item[key] = input.value;
+      } else {
+        elements[id][key] = input.value;
+      }
+      schedule();
+    });
+
+    document.getElementById("app").addEventListener("click", function (event) {
+      var option = event.target.closest(".pick-option");
+      if (option) {
+        var slot = Number(option.getAttribute("data-slot"));
+        products[slot].productId = option.getAttribute("data-id");
+        closeMenus();
+        paintSlot(slot);
+        save();
+        return;
+      }
+      var countButton = event.target.closest("[data-count]");
+      if (countButton) {
+        setCount(Number(countButton.getAttribute("data-count")));
+        return;
+      }
+      var picker = event.target.closest(".pick-btn");
+      if (picker) {
+        var menu = picker.parentNode.querySelector(".pick-menu");
+        var wasHidden = menu.hidden;
+        closeMenus();
+        if (wasHidden) {
+          menu.hidden = false;
+          var filter = menu.querySelector(".pick-filter");
+          filter.value = "";
+          filterMenu(menu, "");
+          filter.focus();
+        }
+        return;
+      }
+      var button = event.target.closest(".shape");
+      if (!button) return;
+      var key = button.getAttribute("data-shape");
+      elements[id].shapes[key] = elements[id].shapes[key] === false;
+      draw();
+      save();
+    });
+
+    document.addEventListener("click", function (event) {
+      if (event.target.closest && event.target.closest(".pick")) return;
+      closeMenus();
+    });
+
+    if (!spec) {
+      document.getElementById("title").textContent = "Elemento";
+      document.getElementById("app").innerHTML = "<p class=\"missing\">Ese elemento no existe.</p>";
+      mark("", false);
+    } else {
+      document.getElementById("title").textContent = spec.title;
+      document.title = spec.title + " — Banner Director";
+      var wait = fetch("/api/elements", { cache: "no-store" }).then(function (response) { return response.json(); });
+      var productsWait = id === "rail"
+        ? fetch("/api/content", { cache: "no-store" }).then(function (response) { return response.json(); })
+        : Promise.resolve(null);
+      var catalogWait = id === "rail"
+        ? fetch("/api/catalog", { cache: "no-store" }).then(function (response) { return response.json(); })
+        : Promise.resolve(null);
+      Promise.all([wait, productsWait, catalogWait]).then(function (result) {
+        elements = result[0];
+        products = result[1] ? result[1].products : null;
+        catalog = result[2] && result[2].products ? result[2].products : [];
+        draw();
+        mark("Listo para editar", true);
+      }).catch(function () {
+        mark("No se pudo cargar", false);
+      });
+      window.addEventListener("resize", fit);
+    }
+  </script>
+</body>
+</html>

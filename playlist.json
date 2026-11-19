@@ -1,0 +1,54 @@
+{
+  "visible": true,
+  "elements": [
+    {
+      "id": "c1794000100001",
+      "visible": true,
+      "seconds": 18
+    },
+    {
+      "id": "c1794000100002",
+      "visible": true,
+      "seconds": 18
+    },
+    {
+      "id": "c1794000100003",
+      "visible": true,
+      "seconds": 18
+    },
+    {
+      "id": "c1794000100004",
+      "visible": true,
+      "seconds": 18
+    }
+  ],
+  "lists": [
+    {
+      "id": "l1",
+      "name": "Shell",
+      "playing": true,
+      "elements": [
+        {
+          "id": "c1794000100001",
+          "visible": true,
+          "seconds": 18
+        },
+        {
+          "id": "c1794000100002",
+          "visible": true,
+          "seconds": 18
+        },
+        {
+          "id": "c1794000100003",
+          "visible": true,
+          "seconds": 18
+        },
+        {
+          "id": "c1794000100004",
+          "visible": true,
+          "seconds": 18
+        }
+      ]
+    }
+  ]
+}

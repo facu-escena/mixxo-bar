@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Editar góndola — Banner Director</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #1a100c;
+    color: #f6efe9;
+    font-family: Poppins, "Avenir Next", Ubuntu, "Segoe UI", sans-serif;
+  }
+  header, main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 26px 0 16px;
+  }
+  .eyebrow {
+    margin: 0 0 4px;
+    color: #f47b20;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .eyebrow a { color: inherit; text-decoration: none; }
+  h1 { margin: 0; font-size: 32px; letter-spacing: -0.03em; }
+  .status { margin: 0; color: #cbb8ad; font-size: 14px; }
+  .status.ok { color: #b6f2c4; }
+  .preview-label { margin: 0 0 8px; color: #cbb8ad; font-size: 13px; }
+  .stage { width: 100%; overflow: hidden; background: #2c1610; border-radius: 12px; border: 1px solid #4a2e24; }
+  .stage iframe { width: 1920px; height: 158px; border: 0; transform-origin: top left; pointer-events: none; }
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  article {
+    background: #261812;
+    border: 1px solid #4a2e24;
+    border-radius: 14px;
+    padding: 14px;
+  }
+  article h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffc9a2;
+  }
+  article h2 img { width: 36px; height: 36px; object-fit: contain; background: #fff; border-radius: 8px; }
+  label { display: block; margin-bottom: 10px; color: #cbb8ad; font-size: 12px; }
+  input {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    border: 0;
+    border-radius: 8px;
+    background: #140e0b;
+    color: #fff;
+    font: 600 16px Poppins, "Avenir Next", Ubuntu, sans-serif;
+    padding: 8px 10px;
+    outline: none;
+  }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .footer { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 36px; color: #cbb8ad; font-size: 13px; }
+  button {
+    border: 1px solid #4a2e24;
+    background: #140e0b;
+    color: #fff;
+    border-radius: 8px;
+    height: 40px;
+    padding: 0 14px;
+    font: 700 14px Poppins, sans-serif;
+    cursor: pointer;
+  }
+  @media (max-width: 900px) {
+    .products { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow"><a href="/home">Pantallas</a> · 123</p>
+      <h1>Editar pantalla</h1>
+    </div>
+    <p class="status" id="status">Conectando…</p>
+  </header>
+  <main>
+    <p class="preview-label">Tanda bajo los productos · 1920 × 158</p>
+    <div class="stage" id="stage"><iframe src="/" title="Vista previa de la barra"></iframe></div>
+    <div class="products" id="products"></div>
+    <div class="footer">
+      <span>Precios de cordiez.com.ar. El queso está por kilo.</span>
+      <button id="reset" type="button">Restablecer</button>
+    </div>
+  </main>
+  <script>
+    var defaults = {
+      products: [
+        { brand: "De La Familia", name: "Leche entera", detail: "Brick 1 litro", price: 1599, listPrice: 1909, badge: "Oferta", image: "/img/leche.png" },
+        { brand: "Ilolay", name: "Yogur frutilla", detail: "Sachet 900 g", price: 1899, listPrice: 2679, badge: "Oferta", image: "/img/yogur.png" },
+        { brand: "Las Tres Estrellas", name: "Queso cremoso", detail: "Precio por kg", price: 8990, listPrice: 12009, badge: "Oferta", image: "/img/queso.png" }
+      ]
+    };
+    var ready = false;
+    var timer = null;
+    var statusEl = document.getElementById("status");
+    var fields = ["brand", "name", "detail", "price", "listPrice", "badge"];
+
+    function fit() {
+      var stage = document.getElementById("stage");
+      var frame = stage.querySelector("iframe");
+      var scale = stage.clientWidth / 1920;
+      frame.style.transform = "scale(" + scale + ")";
+      stage.style.height = (158 * scale) + "px";
+    }
+
+    function setStatus(ok, text) {
+      statusEl.textContent = text;
+      statusEl.classList.toggle("ok", ok);
+    }
+
+    function field(id, label, value) {
+      var wrap = document.createElement("label");
+      wrap.textContent = label;
+      var input = document.createElement("input");
+      input.id = id;
+      input.value = value == null ? "" : value;
+      input.maxLength = id.indexOf("badge") >= 0 ? 16 : 42;
+      input.autocomplete = "off";
+      wrap.appendChild(input);
+      return wrap;
+    }
+
+    function build(data) {
+      var root = document.getElementById("products");
+      root.textContent = "";
+      data.products.forEach(function (item, index) {
+        var card = document.createElement("article");
+        card.setAttribute("data-product-id", item.productId || "");
+        var title = document.createElement("h2");
+        var thumb = document.createElement("img");
+        thumb.src = item.image;
+        thumb.alt = "";
+        title.appendChild(thumb);
+        title.appendChild(document.createTextNode("Producto " + (index + 1)));
+        card.appendChild(title);
+        var image = document.createElement("input");
+        image.type = "hidden";
+        image.id = "p" + index + "-image";
+        image.value = item.image || "";
+        card.appendChild(image);
+        card.appendChild(field("p" + index + "-brand", "Marca", item.brand));
+        card.appendChild(field("p" + index + "-name", "Producto", item.name));
+        card.appendChild(field("p" + index + "-detail", "Presentación", item.detail));
+        var pair = document.createElement("div");
+        pair.className = "pair";
+        pair.appendChild(field("p" + index + "-price", "Precio", item.price));
+        pair.appendChild(field("p" + index + "-listPrice", "Precio anterior", item.listPrice));
+        card.appendChild(pair);
+        card.appendChild(field("p" + index + "-badge", "Etiqueta", item.badge));
+        root.appendChild(card);
+      });
+    }
+
+    function readForm() {
+      return {
+        products: [0, 1, 2].map(function (index) {
+          var card = document.getElementById("products").children[index];
+          var item = {
+            image: document.getElementById("p" + index + "-image").value,
+            productId: card ? card.getAttribute("data-product-id") || "" : ""
+          };
+          fields.forEach(function (name) {
+            item[name] = document.getElementById("p" + index + "-" + name).value;
+          });
+          return item;
+        })
+      };
+    }
+
+    function save() {
+      fetch("/api/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(readForm())
+      }).then(function (response) {
+        if (!response.ok) throw new Error("save");
+        setStatus(true, "En la pantalla");
+      }).catch(function () {
+        setStatus(false, "No se pudo actualizar la pantalla");
+      });
+    }
+
+    function schedule() {
+      if (!ready) return;
+      setStatus(false, "Actualizando…");
+      clearTimeout(timer);
+      timer = setTimeout(save, 180);
+    }
+
+    document.getElementById("products").addEventListener("input", schedule);
+    document.getElementById("reset").addEventListener("click", function () {
+      ready = false;
+      build(defaults);
+      ready = true;
+      save();
+    });
+
+    fetch("/api/content", { cache: "no-store" })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (!data.products) data = defaults;
+        build(data);
+        ready = true;
+        setStatus(true, "En la pantalla");
+      })
+      .catch(function () {
+        build(defaults);
+        setStatus(false, "No hay conexión con la pantalla");
+      });
+
+    fit();
+    window.addEventListener("resize", fit);
+  </script>
+</body>
+</html>

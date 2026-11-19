@@ -1,0 +1,35 @@
+{
+  "count": 3,
+  "products": [
+    {
+      "brand": "Ilolay",
+      "name": "Yogur firme vainilla",
+      "detail": "Vaso 120 g",
+      "price": 799,
+      "listPrice": 1065,
+      "badge": "Oferta",
+      "image": "/img/p27.jpg",
+      "productId": "p27"
+    },
+    {
+      "brand": "De La Familia",
+      "name": "Leche descremada",
+      "detail": "UAT 1 litro",
+      "price": 1599,
+      "listPrice": 1904,
+      "badge": "Oferta",
+      "image": "/img/p02.jpg",
+      "productId": "p02"
+    },
+    {
+      "brand": "Apóstoles",
+      "name": "Leche entera",
+      "detail": "UAT 1 litro",
+      "price": 1599,
+      "listPrice": 1738,
+      "badge": "Oferta",
+      "image": "/img/p05.jpg",
+      "productId": "p11"
+    }
+  ]
+}

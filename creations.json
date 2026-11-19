@@ -1,0 +1,134 @@
+{
+  "items": [
+    {
+      "id": "c1794000100001",
+      "name": "Luz con bocina + inflador + linga",
+      "template": "feature",
+      "background": "#3a0c10",
+      "gradient": {
+        "on": true,
+        "from": "#3a0c10",
+        "to": "#dd1d21",
+        "angle": 100
+      },
+      "particles": true,
+      "wash": true,
+      "fx": "streak",
+      "pieces": [],
+      "feature": {
+        "url": "https://marketshell.shell.com.ar/p/combo-bici-luz-bicicleta-con-bocina-inflador-bici-linga?id=a1b7baab-bd07-46e3-8468-f5a5a769773d",
+        "brand": "PODIOS",
+        "name": "Luz con bocina + inflador + linga",
+        "detail": "USB recargable · bocina · inflador · linga 80 cm · 6 cuotas · 575 pts · sin imp. $17.107",
+        "price": 20700,
+        "listPrice": 0,
+        "image": "/img/feat-shellcombo.png",
+        "bg": "#3a0c10",
+        "edge": "#dd1d21",
+        "ink": "#fff8f2",
+        "accent": "#fbce07",
+        "glow": "#fbce07"
+      }
+    },
+    {
+      "id": "c1794000100002",
+      "name": "Helix Ultra",
+      "template": "text",
+      "background": "#1d232a",
+      "gradient": {
+        "on": true,
+        "from": "#1d232a",
+        "to": "#dd1d21",
+        "angle": 108
+      },
+      "particles": true,
+      "wash": true,
+      "fx": "streak",
+      "pieces": [
+        {
+          "text": "HELIX ULTRA",
+          "x": 34.0,
+          "y": 50.0,
+          "font": "Anton, sans-serif",
+          "size": 42,
+          "bold": true,
+          "color": "#fbce07"
+        },
+        {
+          "text": "Protección del motor",
+          "x": 68.0,
+          "y": 50.0,
+          "font": "Oswald, sans-serif",
+          "size": 26,
+          "bold": true,
+          "color": "#ffffff"
+        }
+      ]
+    },
+    {
+      "id": "c1794000100003",
+      "name": "Shell Select",
+      "template": "text",
+      "background": "#fbce07",
+      "gradient": {
+        "on": true,
+        "from": "#fbce07",
+        "to": "#ffe56a",
+        "angle": 90
+      },
+      "particles": true,
+      "wash": true,
+      "fx": "streak",
+      "pieces": [
+        {
+          "text": "SHELL SELECT",
+          "x": 36.0,
+          "y": 50.0,
+          "font": "Anton, sans-serif",
+          "size": 42,
+          "bold": true,
+          "color": "#dd1d21"
+        },
+        {
+          "text": "Todo para el viaje",
+          "x": 68.0,
+          "y": 46.0,
+          "font": "Oswald, sans-serif",
+          "size": 26,
+          "bold": true,
+          "color": "#dd1d21"
+        }
+      ]
+    },
+    {
+      "id": "c1794000100004",
+      "name": "Mountain bike rodado 29",
+      "template": "feature",
+      "background": "#3a0c10",
+      "gradient": {
+        "on": true,
+        "from": "#3a0c10",
+        "to": "#dd1d21",
+        "angle": 100
+      },
+      "particles": true,
+      "wash": true,
+      "fx": "streak",
+      "pieces": [],
+      "feature": {
+        "url": "https://marketshell.shell.com.ar/p/bicicleta-mountain-bike-rodado-29-con-21-velocidades-shimano-con-inflador?id=a0e45944-c74a-40b8-97cc-719b2c8ae522",
+        "brand": "DUAVE",
+        "name": "Mountain bike rodado 29",
+        "detail": "21 vel. Shimano · inflador · 12% off · 6 cuotas · 7.150 pts · sin imp. $212.727",
+        "price": 257400,
+        "listPrice": 325000,
+        "image": "/img/feat-shellbike.png",
+        "bg": "#3a0c10",
+        "edge": "#dd1d21",
+        "ink": "#fff8f2",
+        "accent": "#fbce07",
+        "glow": "#fbce07"
+      }
+    }
+  ]
+}

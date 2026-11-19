@@ -1,0 +1,39 @@
+{
+  "rail": {
+    "shapes": {
+      "spine": true,
+      "frames": true,
+      "gleam": true
+    }
+  },
+  "offer": {
+    "shapes": {
+      "spine": true,
+      "pill": true,
+      "halo": true,
+      "particles": true,
+      "shine": true
+    },
+    "kicker": "Ofertas",
+    "hero": "2×1",
+    "title": "Llevá 2, pagá 1",
+    "detail": "en leches, yogures y quesos"
+  },
+  "fresh": {
+    "shapes": {
+      "spine": true,
+      "pill": true,
+      "seal": true,
+      "rings": true,
+      "particles": true,
+      "mist": true,
+      "shine": true
+    },
+    "kicker": "Lácteos",
+    "hero": "Fresco",
+    "seal": "HOY",
+    "sealDetail": "Épico",
+    "title": "Recién repuesto",
+    "detail": "Cadena de frío · todos los días"
+  }
+}

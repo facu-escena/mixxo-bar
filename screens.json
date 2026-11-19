@@ -1,0 +1,28 @@
+{
+  "screens": [
+    {
+      "id": "121",
+      "online": false,
+      "name": "",
+      "description": ""
+    },
+    {
+      "id": "122",
+      "online": false,
+      "name": "",
+      "description": ""
+    },
+    {
+      "id": "123",
+      "online": true,
+      "name": "Góndola 3",
+      "description": ""
+    },
+    {
+      "id": "124",
+      "online": false,
+      "name": "",
+      "description": ""
+    }
+  ]
+}

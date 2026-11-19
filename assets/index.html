@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Cordiez Mixxo</title>
+<style>
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #141414;
+    color: #f5f5f5;
+    font-family: Poppins, sans-serif;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3vw;
+    box-sizing: border-box;
+    gap: 3vw;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 1.4vw;
+    white-space: nowrap;
+  }
+  .name, .mixxo {
+    font-size: 42vh;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .mixxo { color: #e10600; }
+  .sub {
+    flex: 1;
+    font-size: 22vh;
+    line-height: 1;
+    opacity: 0.72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .clock {
+    font-size: 42vh;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <div class="brand"><span class="name">Cordiez</span><span class="mixxo">Mixxo</span></div>
+  <div class="sub">Pantalla de prueba</div>
+  <div class="clock" id="clock">--:--</div>
+  <script>
+    function tick() {
+      var d = new Date();
+      var p = function (n) { return (n < 10 ? "0" : "") + n; };
+      document.getElementById("clock").textContent = p(d.getHours()) + ":" + p(d.getMinutes());
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
